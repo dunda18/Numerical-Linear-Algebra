@@ -1,21 +1,31 @@
 #include "tools.h"
 
+#include <cmath>
+
 namespace NLA {
 bool IsCloseToZero(double val) {
-    return abs(val) < EPS;
+    return fabs(val) < EPS;
 }
 
-Eigen::Matrix2d GivensRotation(double x, double y) {
-    if (IsCloseToZero(y)) {
-        return Eigen::Matrix2d::Identity();
+bool IsUpperTriangular(const Matrix& A) {
+    for (Index i = 0; i < A.rows(); ++i) {
+        for (Index j = i + 1; j < A.cols(); ++j) {
+            if (!IsCloseToZero(A(i, j))) {
+                return false;
+            }
+        }
     }
 
-    Eigen::Matrix2d G;
-    double r = sqrt(x * x + y * y);
-    double c = x / r;
-    double s = -y / r;
-    G << c, -s, s, c;
+    return true;
+}
 
-    return G;
+bool IsHessenbergUpperTriangular(const Matrix& H) {
+    for (Index i = 0; i + 1 < H.rows(); ++i) {
+        if (!IsCloseToZero(H(i, i + 1))) {
+            return false;
+        }
+    }
+
+    return true;
 }
 } // namespace NLA

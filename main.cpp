@@ -1,9 +1,14 @@
 #include <iostream>
 
 #include "tests/tests.h"
+#include "except.h"
 
 int main() {
-    srand(123);
-    RunAllTests();
+    try {
+        srand(123);
+        NLA::RunAllTests();
+    } catch (...) {
+        Except::React();
+    }
     return 0;
 }

@@ -1,12 +1,16 @@
 #ifndef NUMERICAL_LINEAR_ALGEBRA_EIGEN_SOLVER_H
 #define NUMERICAL_LINEAR_ALGEBRA_EIGEN_SOLVER_H
 
-#include "eigen/Eigen/Dense"
+#include "linalg.h"
 
 namespace NLA {
-Eigen::VectorXd SimpleQR(Eigen::MatrixXd A);
+Vector SimpleQR(Matrix A);
 
-Eigen::VectorXd HessenbergQR(const Eigen::MatrixXd& A);
+Vector HessenbergQR(const Matrix& A);
+
+Vector RayleighQR(const Matrix& A);
+
+Vector FrancisQR(const Matrix& A);
 } // namespace NLA
 
 #endif //NUMERICAL_LINEAR_ALGEBRA_EIGEN_SOLVER_H

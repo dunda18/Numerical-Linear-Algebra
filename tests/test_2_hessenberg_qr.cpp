@@ -1,27 +1,32 @@
 #include "test_2_hessenberg_qr.h"
 #include "../eigen_solver.h"
-#include "../tools.h"
+#include "eigenvalues_validation.h"
 
+#include <iostream>
+
+namespace NLA {
 void Test2HessenbergQR() {
-    for (int _ = 0; _ < 3; ++_) {
-        Eigen::Index n = rand() % 100 + 1;
-        Eigen::MatrixXd A = Eigen::MatrixXd::Random(n, n);
-        for (Eigen::Index i = 0; i < n; ++i) {
-            for (Eigen::Index j = i; j < n; ++j) {
+    constexpr int N_MATRICES = 5;
+    constexpr Index N = 80;
+
+    clock_t time = 0;
+    for (int _ = 0; _ < N_MATRICES; ++_) {
+        Matrix A = Matrix::Random(N, N);
+        for (Index i = 0; i < N; ++i) {
+            for (Index j = i; j < N; ++j) {
                 A(i, j) = A(j, i);
             }
         }
 
-        Eigen::VectorXd eigenvalues = NLA::HessenbergQR(A);
-        Eigen::VectorXcd complex_correct = A.eigenvalues();
-        Eigen::VectorXd correct(n);
-        for (Eigen::Index i = 0; i < n; ++i) {
-            correct(i) = complex_correct(i).real();
-        }
-        std::sort(eigenvalues.begin(), eigenvalues.end());
-        std::sort(correct.begin(), correct.end());
-        for (Eigen::Index i = 0; i < n; ++i) {
-            assert(abs(eigenvalues(i) - correct(i)) < NLA::EPS);
-        }
+        clock_t start = clock();
+        Vector eigenvalues = HessenbergQR(A);
+        clock_t end = clock();
+        time += end - start;
+
+        assert(IsEigenvaluesCorrect(eigenvalues, A));
     }
+
+    std::cout << "Test2HessenbergQR: Matrix size - " << N << ", Number of matrices - " << N_MATRICES << ", Time: "
+              << (double) (time) / CLOCKS_PER_SEC << " seconds" << '\n';
 }
+} // namespace NLA

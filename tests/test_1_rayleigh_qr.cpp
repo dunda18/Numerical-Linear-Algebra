@@ -1,11 +1,11 @@
-#include "test_1_simple_qr.h"
+#include "test_1_rayleigh_qr.h"
 #include "../eigen_solver.h"
 #include "eigenvalues_validation.h"
 
 #include <iostream>
 
 namespace NLA {
-void Test1SimpleQR() {
+void Test1RayleighQR() {
     constexpr int N_MATRICES = 20;
     constexpr Index N = 5;
 
@@ -19,14 +19,14 @@ void Test1SimpleQR() {
         }
 
         clock_t start = clock();
-        Vector eigenvalues = SimpleQR(A);
+        Vector eigenvalues = RayleighQR(A);
         clock_t end = clock();
         time += end - start;
 
         assert(IsEigenvaluesCorrect(eigenvalues, A));
     }
 
-    std::cout << "Test1SimpleQR: Matrix size - " << N << ", Number of matrices - " << N_MATRICES << ", Time: "
+    std::cout << "Test1RayleighQR: Matrix size - " << N << ", Number of matrices - " << N_MATRICES << ", Time: "
               << (double) (time) / CLOCKS_PER_SEC << " seconds" << '\n';
 }
 } // namespace NLA
